@@ -49,6 +49,8 @@ def get_extensions():
             "-D__CUDA_NO_HALF_OPERATORS__",
             "-D__CUDA_NO_HALF_CONVERSIONS__",
             "-D__CUDA_NO_HALF2_OPERATORS__",
+            # Added for better compatibility with newer CUDA versions (12.x+)
+            "-D__CUDA_NO_BFLOAT16_CONVERSIONS__",
         ]
 
     include_dirs = [extensions_dir]
@@ -91,26 +93,8 @@ setup(
     url="https://github.com/facebookresearch/detectron2",
     description="Detectron2 is Facebook AI Research's next generation library "
     "that provides state-of-the-art detection and segmentation algorithms.",
-    packages=find_packages(exclude=("configs", "tests", "*.tests", "*.tests.*", "tests.*")),
-    package_data={"detectron2.model_zoo": get_model_zoo_configs()},
-    python_requires=">=3.7",
-    install_requires=[
-        "termcolor>=1.1",
-        "Pillow>=7.1",
-        "yacs>=0.1.8",
-        "tabulate",
-        "cloudpickle",
-        "matplotlib",
-        "mock",
-        "tqdm>4.29.0",
-        "tensorboard",
-        "fvcore>=0.1.5,<0.1.6",
-        "iopath>=0.1.7,<0.1.10",
-        "omegaconf>=2.1",
-        "hydra-core>=1.1",
-        "black",
-        "packaging",
-    ],
+    packages=find_packages(exclude=("configs",)),
+    package_data={"detectron2": ["model_zoo/configs/**/*.yaml", "model_zoo/configs/**/*.py"]},
     ext_modules=get_extensions(),
     cmdclass={"build_ext": torch.utils.cpp_extension.BuildExtension},
 )
