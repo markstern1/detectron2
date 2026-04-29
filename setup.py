@@ -55,9 +55,11 @@ def get_extensions():
             "-Wno-deprecated-declarations",
         ]
 
-        # Use all available CPU cores for parallel CUDA compilation to speed up builds
-        # on my local machine. Adjust or remove if building in a constrained environment.
-        extra_compile_args["cxx"] += ["-j8"]
+        # Use available CPU cores for parallel CUDA compilation.
+        # Read from env var COMPILE_JOBS so it's easy to override without editing this file.
+        # Defaults to 4 as a safe middle ground on most machines.
+        num_jobs = int(os.getenv("COMPILE_JOBS", "4"))
+        extra_compile_args["cxx"] += [f"-j{num_jobs}"]
 
     include_dirs = [extensions_dir]
 
@@ -86,14 +88,4 @@ def get_model_zoo_configs() -> List[str]:
         shutil.copytree(source_configs_dir, destination)
     except Exception:
         pass
-    config_paths = glob.glob("configs/**/*.yaml", recursive=True) + glob.glob(
-        "configs/**/*.py", recursive=True
-    )
-    return config_paths
-
-
-setup(
-    name="detectron2",
-    version=get_version(),
-    author="FAIR",
-    url="https://g
+    config_paths = glob.
