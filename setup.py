@@ -55,6 +55,10 @@ def get_extensions():
             "-Wno-deprecated-declarations",
         ]
 
+        # Use all available CPU cores for parallel CUDA compilation to speed up builds
+        # on my local machine. Adjust or remove if building in a constrained environment.
+        extra_compile_args["cxx"] += ["-j8"]
+
     include_dirs = [extensions_dir]
 
     ext_modules = [
@@ -92,6 +96,4 @@ setup(
     name="detectron2",
     version=get_version(),
     author="FAIR",
-    url="https://github.com/facebookresearch/detectron2",
-    description="Detectron2 is Facebook AI Research's next generation lib",
-)
+    url="https://g
