@@ -20,6 +20,10 @@ Example usage::
     cfg.merge_from_file("path/to/config.yaml")
     predictor = DefaultPredictor(cfg)
     outputs = predictor(image)
+
+Notes:
+    Personal fork for experimenting with custom dataset training and
+    fine-tuning pre-trained models on domain-specific data.
 """
 
 from .version import __version__
